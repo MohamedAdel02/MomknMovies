@@ -10,6 +10,7 @@
 		D9A462A4303275F300FAEAF6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D9A462A3303275F300FAEAF6 /* Kingfisher */; };
 		D9A462AA3032782700FAEAF6 /* SkeletonUI in Frameworks */ = {isa = PBXBuildFile; productRef = D9A462A93032782700FAEAF6 /* SkeletonUI */; };
 		D9A4635B303279F000FAEAF6 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = D9A4635A303279F000FAEAF6 /* FirebaseCore */; };
+		D9F0E1FE30348E070019A263 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D9F0E1FD30348E070019A263 /* FirebaseAuth */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 				D9A462A4303275F300FAEAF6 /* Kingfisher in Frameworks */,
 				D9A4635B303279F000FAEAF6 /* FirebaseCore in Frameworks */,
 				D9A462AA3032782700FAEAF6 /* SkeletonUI in Frameworks */,
+				D9F0E1FE30348E070019A263 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +87,7 @@
 				D9A462A3303275F300FAEAF6 /* Kingfisher */,
 				D9A462A93032782700FAEAF6 /* SkeletonUI */,
 				D9A4635A303279F000FAEAF6 /* FirebaseCore */,
+				D9F0E1FD30348E070019A263 /* FirebaseAuth */,
 			);
 			productName = MomknMovies;
 			productReference = D9A462873032742500FAEAF6 /* MomknMovies.app */;
@@ -403,6 +406,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D9A46359303279D800FAEAF6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
+		};
+		D9F0E1FD30348E070019A263 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D9A46359303279D800FAEAF6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
