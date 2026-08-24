@@ -64,7 +64,7 @@ class AuthManager {
         let nsError = error as NSError
         
         guard let errorCode = AuthErrorCode(rawValue: nsError.code) else {
-            return .unknown
+            return .unknown(nsError.localizedDescription)
         }
         
         switch errorCode {
@@ -87,7 +87,6 @@ class AuthManager {
         case .requiresRecentLogin:
             return .requiresRecentLogin
         default:
-            return .unknown
-        }
+            return .unknown(nsError.localizedDescription)        }
     }
 }

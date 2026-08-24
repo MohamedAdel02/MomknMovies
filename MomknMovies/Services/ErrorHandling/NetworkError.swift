@@ -9,6 +9,8 @@ import Foundation
 import FirebaseAuth
 
 enum NetworkError: LocalizedError {
+
+    //FirebaseAuth
     case invalidEmail
     case emailAlreadyInUse
     case weakPassword
@@ -18,8 +20,19 @@ enum NetworkError: LocalizedError {
     case networkError
     case tooManyRequests
     case requiresRecentLogin
-    case unknown
-    
+
+    //Networking
+    case invalidURL
+    case noConnectivity
+    case timeout
+    case unauthorized
+    case server(statusCode: Int)
+    case client(statusCode: Int)
+    case decoding(String)
+    case unknown(String)
+
+
+
     var errorDescription: String? {
         switch self {
         case .invalidEmail:
@@ -40,10 +53,22 @@ enum NetworkError: LocalizedError {
             return String(localized: "Too many attempts. Please try again later.")
         case .requiresRecentLogin:
             return String(localized: "Please log in again to complete this action.")
-        case .unknown:
-            return String(localized: "Something went wrong. Please try again.")
+        case .invalidURL:
+            return String(localized: "The request URL is invalid.")
+        case .noConnectivity:
+            return String(localized: "No internet connection. Please check your network.")
+        case .timeout:
+            return String(localized: "The request timed out. Please try again.")
+        case .unauthorized:
+            return String(localized: "You are not authorized to perform this action.")
+        case .server(let statusCode):
+            return String(localized: "Server error (\(statusCode)). Please try again later.")
+        case .client(let statusCode):
+            return String(localized: "Request error (\(statusCode)). Please check and try again.")
+        case .decoding(let message):
+            return String(localized: "Failed to process the response: \(message)")
+        case .unknown(let message):
+            return String(localized: "Something went wrong: \(message)")
         }
     }
 }
-
-
