@@ -19,18 +19,21 @@ struct MomknMoviesApp: App {
     
     var body: some Scene {
         WindowGroup {
-            Group {
-                if selectedLanguage == nil {
-                    LanguageSelectionView()
-                } else {
-                    MainAuthView()
-                        .environment(router)
-                        .id(selectedLanguage)
-                        .withToast()
-                }
-            }
-            .environment(\.locale, Locale(identifier: selectedLanguage ?? "en"))
-            .environment(\.layoutDirection, selectedLanguage == "ar" ? .rightToLeft: .leftToRight)
+//            Group {
+//                if selectedLanguage == nil {
+//                    LanguageSelectionView()
+//                } else {
+//                    MainAuthView()
+//                        .environment(router)
+//                        .id(selectedLanguage)
+//                        .withToast()
+//                }
+//            }
+//            .environment(\.locale, Locale(identifier: selectedLanguage ?? "en"))
+//            .environment(\.layoutDirection, selectedLanguage == "ar" ? .rightToLeft: .leftToRight)
+            
+            AppTabView()
+
         }
     }
 }
