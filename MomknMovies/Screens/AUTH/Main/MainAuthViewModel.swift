@@ -18,7 +18,6 @@ class MainAuthViewModel {
     func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
             self?.onTransition()
-//            print("ffff")
         }
     }
     

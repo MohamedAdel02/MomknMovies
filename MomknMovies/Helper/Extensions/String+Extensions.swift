@@ -23,3 +23,25 @@ extension String {
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: self)
     }
 }
+
+extension String {
+    static func localized(_ key: String.LocalizationValue) -> String {
+        let lang = UserDefaults.standard.string(forKey: "selectedLanguage") ?? "en"
+        return String(localized: key, locale: Locale(identifier: lang))
+    }
+}
+
+
+extension String {
+
+    static func localized(_ key: String, language: String) -> String {
+
+        guard let path = Bundle.main.path(forResource: language, ofType: "lproj"), let bundle = Bundle(path: path) else {
+            return NSLocalizedString(key, comment: "")
+        }
+
+        return NSLocalizedString(key, bundle: bundle, comment: "")
+
+    }
+
+}

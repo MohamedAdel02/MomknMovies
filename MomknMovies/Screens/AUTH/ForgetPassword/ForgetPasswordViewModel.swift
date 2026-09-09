@@ -5,7 +5,7 @@
 //  Created by Mohamed Adel on 17/08/2026.
 //
 
-import Foundation
+import SwiftUI
 
 @Observable
 class ForgetPasswordViewModel {
@@ -18,6 +18,9 @@ class ForgetPasswordViewModel {
     var buttonIsDisabled: Bool {
         email.isEmpty
     }
+    
+    @ObservationIgnored @AppStorage("selectedLanguage")
+    private var selectedLanguage = "en"
 
     private let authRepository: AuthRepository
 
@@ -41,13 +44,17 @@ class ForgetPasswordViewModel {
     
     func checkCredentials() -> Bool {
         guard email.isValidEmail() else {
-            alertMessage = String(localized:"Please enter a valid email.")
+            alertMessage = String.localized(
+                "Please enter a valid email.",
+                language: selectedLanguage
+            )
             showAlert = true
             return false
         }
         
         return true
     }
+
     
 }
 

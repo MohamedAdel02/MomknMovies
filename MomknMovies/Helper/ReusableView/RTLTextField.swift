@@ -16,6 +16,7 @@ struct RTLTextField: UIViewRepresentable {
     var placeholder: String
     var isSecured: Bool = false
     var isRTL: Bool
+    var textColor: UIColor = .white
     
     func makeUIView(context: Context) -> UITextField {
         let textField = UITextField()
@@ -23,8 +24,8 @@ struct RTLTextField: UIViewRepresentable {
         textField.delegate = context.coordinator
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
-        textField.textColor = .white
-        textField.tintColor = .white
+        textField.textColor = textColor
+        textField.tintColor = textColor
         
         textField.addTarget(
             context.coordinator,
@@ -41,6 +42,13 @@ struct RTLTextField: UIViewRepresentable {
         
         if !context.coordinator.isEditing && textField.text != text {
             textField.text = text
+        }
+        
+        if textField.textColor != textColor {
+            textField.textColor = textColor
+        }
+        if textField.tintColor != textColor {
+            textField.tintColor = textColor
         }
         
         let targetAlignment: NSTextAlignment = isRTL ? .right : .left
@@ -190,9 +198,22 @@ struct RTLTextField: UIViewRepresentable {
         func textFieldDidEndEditing(_ textField: UITextField) {
             isEditing = false
             let final = textField.text ?? ""
+            let previousParentText = parent.text
+            
             DispatchQueue.main.async { [weak self] in
-                self?.parent.text = final
+                guard let self else { return }
+                // Only apply this if nothing else (e.g. a manual clear()) changed
+                // the bound text in the meantime — otherwise this would clobber it.
+                if self.parent.text == previousParentText {
+                    self.parent.text = final
+                }
             }
         }
+    }
+    
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextField, context: Context) -> CGSize? {
+        let width = proposal.width ?? uiView.intrinsicContentSize.width
+        let height = uiView.font?.lineHeight ?? 20
+        return CGSize(width: width, height: height + 16) // adjust padding to taste
     }
 }

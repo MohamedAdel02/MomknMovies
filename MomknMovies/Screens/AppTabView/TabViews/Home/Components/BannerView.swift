@@ -9,17 +9,6 @@ import SwiftUI
 import SkeletonUI
 import Combine
 
-enum BannerAsset {
-
-    static let arabicImages: [ImageResource] = [.banner1Ar, .banner2Ar, .banner3Ar, .banner4Ar]
-    static let englishImages: [ImageResource] = [.banner1En, .banner2En, .banner3En, .banner4En]
-
-    static var images: [ImageResource] {
-        let isArabic = (UserDefaults.standard.string(forKey: "selectedLanguage") ?? "ar") == "ar"
-        return isArabic ? arabicImages : englishImages
-    }
-}
-
 struct BannerView: View {
 
     private let images = BannerAsset.images
@@ -73,8 +62,11 @@ struct BannerView: View {
                         }
                 )
                 
-                pageIndicator()
-                    .padding(.bottom, 16)
+                if !isLoading {
+                    pageIndicator()
+                        .padding(.bottom, 16)
+                }
+                    
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
         }

@@ -21,7 +21,10 @@ class LoginViewModel {
     }
     
     private let authRepository: AuthRepository
-
+    
+    @ObservationIgnored @AppStorage("selectedLanguage")
+    private var selectedLanguage = "en"
+    
     init(authRepository: AuthRepository = AuthRepository()) {
         self.authRepository = authRepository
     }
@@ -38,15 +41,30 @@ class LoginViewModel {
     }
     
     private func checkCredentials() -> Bool {
+
         guard email.isValidEmail() && password.isValidPassword() else {
-            alertMessage = String(localized:"Please enter a valid email and password.")
+
+            alertMessage = String.localized(
+
+                "Please enter a valid email and password.",
+
+                language: selectedLanguage
+
+            )
+
+            print("LANGUAGE:", selectedLanguage)
+
+            print("MESSAGE:", alertMessage)
+
             showAlert = true
+
             return false
+
         }
 
         return true
+
     }
     
 }
-
 

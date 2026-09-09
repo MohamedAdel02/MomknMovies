@@ -16,9 +16,13 @@ struct LoginView: View {
     @State var viewModel = LoginViewModel()
     @Binding var authMode: AuthMode
     
-    @Environment(Router.self) private var router
+    @Environment(\.showToast) private var showToast
+    @AppStorage("selectedLanguage") private var selectedLanguage = "en"
+    @Environment(Router<AuthRoute>.self) private var router
     @FocusState private var focusedField: LoginViewField?
+    @State private var isSaving = false
     
+        
     var body: some View {
         
         VStack(spacing: 15) {
@@ -73,12 +77,15 @@ struct LoginView: View {
         .ignoresSafeArea(edges: .top)
         .contentShape(Rectangle())
         .hideKeyboardOnTap()
-        .alert("Error", isPresented: $viewModel.showAlert) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text(viewModel.alertMessage)
+        .onChange(of: viewModel.showAlert) { _, isShowing in
+            if isShowing {
+                showToast(.error(LocalizedStringKey(viewModel.alertMessage)))
+                viewModel.showAlert = false
+            }
         }
-        
+
+            
+
     }
     
     func forgetPasswordButton() -> some View {
@@ -96,23 +103,31 @@ struct LoginView: View {
         Button(action: {
             loginTapped()
         }) {
-            Text("Log In")
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 50)
-                .background(
-                    RadialGradient(
-                        colors: [Color.buttonGradient1, Color.buttonGradient2],
-                        center: .center,
-                        startRadius: 5,
-                        endRadius: 200
-                    )
+            Group {
+                if isSaving {
+                    ProgressView()
+                        .tint(.white)
+                } else {
+                    Text("Log In")
+                        .font(.headline)
+                }
+            }
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 55)
+            .background(
+                RadialGradient(
+                    colors: [Color.buttonGradient1, Color.buttonGradient2],
+                    center: .center,
+                    startRadius: 5,
+                    endRadius: 200
                 )
-                .clipShape(RoundedRectangle(cornerRadius: 15))
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 15))
         }
         .disabled(viewModel.loginIsDisabled)
         .opacity(viewModel.loginIsDisabled ? 0.5 : 1)
+        
     }
     
     func signUpButton() -> some View {
@@ -132,7 +147,9 @@ struct LoginView: View {
     
     func loginTapped() {
         Task {
+            isSaving = true
             await viewModel.login()
+            isSaving = false
         }
     }
     
@@ -141,3 +158,5 @@ struct LoginView: View {
 #Preview {
     LoginView(authMode: .constant(AuthMode.login))
 }
+
+

@@ -18,6 +18,7 @@ struct TextFieldView: View {
     var submitLabel: SubmitLabel = .done
     var labelSize: CGFloat = 15
     var isInvalid: Bool = false
+    var isDisabled: Bool = false
     
     @AppStorage("selectedLanguage")
     private var selectedLanguage: String?
@@ -63,26 +64,21 @@ struct TextFieldView: View {
                 isPasswordVisible: $isPasswordVisible,
                 placeholder: localizedPlaceholder,
                 isSecured: isSecured,
-                isRTL: layoutDirection == .rightToLeft
+                isRTL: layoutDirection == .rightToLeft,
+                textColor: isDisabled ? UIColor.white.withAlphaComponent(0.5) : .white
+
             )
             .autocorrectionDisabled(true)
             .textInputAutocapitalization(.never)
             .submitLabel(submitLabel)
-            .padding(.horizontal, 14)
+            .disabled(isDisabled)
+            .padding([.leading, .trailing], 14)
             .frame(height: 50)
-            .foregroundStyle(.white)
-            .background(Color.textField)
-            .clipShape(
-                RoundedRectangle(cornerRadius: 12)
-            )
+            .background(Color.textField.opacity(isDisabled ? 0.5 : 1))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(
-                        isInvalid
-                        ? Color.red
-                        : Color.clear,
-                        lineWidth: 1.5
-                    )
+                    .stroke(isInvalid ? Color.red : Color.clear, lineWidth: 1.5)
             )
         }
     }

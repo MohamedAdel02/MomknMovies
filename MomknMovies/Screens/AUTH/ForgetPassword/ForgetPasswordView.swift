@@ -11,10 +11,10 @@ struct ForgetPasswordView: View {
     
     @State var viewModel = ForgetPasswordViewModel()
     
-    @AppStorage("selectedLanguage") private var selectedLanguage: String?
+    @AppStorage("selectedLanguage") private var selectedLanguage: String = "en"
     @Environment(\.dismiss) private var dismiss
     @Environment(\.showToast) private var showToast
-    @Environment(Router.self) private var router
+    @Environment(Router<AuthRoute>.self) private var router
     
     var body: some View {
         
@@ -56,11 +56,6 @@ struct ForgetPasswordView: View {
             }
             .contentShape(Rectangle())
             .hideKeyboardOnTap()
-            .alert("Error", isPresented: $viewModel.showAlert) {
-                Button("OK", role: .cancel) { }
-            } message: {
-                Text(viewModel.alertMessage)
-            }
             
         }
         .ignoresSafeArea()
@@ -114,9 +109,10 @@ struct ForgetPasswordView: View {
     func resetPasswordTapped() {
         Task {
             if await viewModel.resetPassword() {
-                
                 showToast(.success("A password reset link has been sent to your email."))
                 dismiss()
+            } else {
+                showToast(.error(LocalizedStringKey(viewModel.alertMessage)))
             }
         }
     }

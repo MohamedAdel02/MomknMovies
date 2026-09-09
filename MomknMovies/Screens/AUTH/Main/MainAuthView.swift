@@ -8,8 +8,7 @@
 import SwiftUI
 
 enum AuthMode {
-    case login
-    case signUp
+    case login, signUp
 }
 
 struct MainAuthView: View {
@@ -17,7 +16,7 @@ struct MainAuthView: View {
     @State var viewModel = MainAuthViewModel()
     @State var authMode: AuthMode = .login
     
-    @Environment(Router.self) private var router
+    @Environment(Router<AuthRoute>.self) private var router
     
     var body: some View {
         
@@ -74,7 +73,7 @@ struct MainAuthView: View {
                 .ignoresSafeArea(edges: .top)
                 .contentShape(Rectangle())
                 .hideKeyboardOnTap()
-                .navigationDestination(for: Route.self) { route in
+                .navigationDestination(for: AuthRoute.self) { route in
                     destination(for: route)
                 }
                 .onAppear {
@@ -89,7 +88,7 @@ struct MainAuthView: View {
     }
     
     @ViewBuilder
-    func destination(for route: Route) -> some View {
+    func destination(for route: AuthRoute) -> some View {
         switch route {
         case .forgetPassword:
             ForgetPasswordView()

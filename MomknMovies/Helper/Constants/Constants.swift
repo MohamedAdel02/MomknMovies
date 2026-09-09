@@ -9,6 +9,7 @@ import Foundation
 
 struct K {
     
-    static let posterBaseURL = "https://image.tmdb.org/t/p/w500"
+    static let posterBaseURL = "https://image.tmdb.org/t/p/w342"
+    static let imageBaseURL = "https://image.tmdb.org/t/p/w200"
     
 }

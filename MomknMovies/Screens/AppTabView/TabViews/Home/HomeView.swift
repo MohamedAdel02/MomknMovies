@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
 
-    @State private var viewModel = HomeViewModel()
+    @Environment(HomeViewModel.self) private var viewModel
 
     var body: some View {
         GeometryReader { geometry in
@@ -26,11 +26,11 @@ struct HomeView: View {
                                 .frame(width: geometry.size.width, height: geometry.size.height * 0.23)
 
                             
-                            HorizontalMoviesList(title: "Popular Movies", movies: viewModel.popularMovies, geometry: geometry, isLoading: viewModel.isLoading)
+                            HorizontalMoviesList(category: .popular, movies: viewModel.popularMovies, genres: viewModel.moviesGenres, geometry: geometry, isLoading: viewModel.isLoading)
 
-                            HorizontalMoviesList(title: "Top Rated", movies: viewModel.topRatedMovies, geometry: geometry, isLoading: viewModel.isLoading)
+                            HorizontalMoviesList(category: .topRated, movies: viewModel.topRatedMovies, genres: viewModel.moviesGenres, geometry: geometry, isLoading: viewModel.isLoading)
 
-                            HorizontalMoviesList(title: "Upcoming", movies: viewModel.upcomingMovies, geometry: geometry, isLoading: viewModel.isLoading)
+                            HorizontalMoviesList(category: .commingSoon, movies: viewModel.upcomingMovies, genres: viewModel.moviesGenres, geometry: geometry, isLoading: viewModel.isLoading)
                         }
                         .padding(.top, 30)
                         .padding(.bottom, 80)
@@ -42,6 +42,9 @@ struct HomeView: View {
             }
         }
         .ignoresSafeArea()
+        .navigationDestination(for: MainRoute.self) { route in
+            destinationView(for: route)
+        }
 
     }
 
@@ -54,8 +57,21 @@ struct HomeView: View {
         .frame(width: geometry.size.width, height: geometry.size.height)
         .ignoresSafeArea()
     }
+    
+    
+    @ViewBuilder
+    private func destinationView(for route: MainRoute) -> some View {
+        switch route {
+        case .movieDetails(let movie):
+            MovieDetailsView(movie: movie)
+        case .allMovies(let category):
+            AllMoviesView(category: category)
+        }
+    }
+
 }
 
 #Preview {
     HomeView()
+        .environment(HomeViewModel())
 }

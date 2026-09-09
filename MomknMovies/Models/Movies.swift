@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import SwiftData
 
-struct MoviesList: Codable {
+struct MoviesList: Codable, Hashable {
+    
     let page: Int
     let movie: [Movie]
     let totalPages: Int
@@ -21,21 +23,44 @@ struct MoviesList: Codable {
     }
 }
 
-struct Movie: Codable {
+struct Movie: Codable, Hashable {
 
-    let id: Int
-    let title: String
-    let backdropPath: String
-    let genreIDS: [Int]
-    let originalTitle: String
-    let overview: String
-    let posterPath: String
-    let releaseDate: String
-    let voteAverage: Double
-    let voteCount: Int
+    var id: Int
+    var title: String
+    var backdropPath: String
+    var genreIDS: [Int]
+    var originalTitle: String
+    var overview: String
+    var posterPath: String
+    var releaseDate: String
+    var voteAverage: Double
+    var voteCount: Int
 
+    init(
+        id: Int,
+        title: String,
+        backdropPath: String = "",
+        genreIDS: [Int],
+        originalTitle: String,
+        overview: String,
+        posterPath: String = "",
+        releaseDate: String,
+        voteAverage: Double,
+        voteCount: Int
+    ) {
+        self.id = id
+        self.title = title
+        self.backdropPath = backdropPath
+        self.genreIDS = genreIDS
+        self.originalTitle = originalTitle
+        self.overview = overview
+        self.posterPath = posterPath
+        self.releaseDate = releaseDate
+        self.voteAverage = voteAverage
+        self.voteCount = voteCount
+    }
+    
     enum CodingKeys: String, CodingKey {
-        
         case id = "id"
         case title = "title"
         case backdropPath = "backdrop_path"
@@ -46,5 +71,20 @@ struct Movie: Codable {
         case releaseDate = "release_date"
         case voteAverage = "vote_average"
         case voteCount = "vote_count"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        id = try container.decode(Int.self, forKey: .id)
+        title = try container.decodeIfPresent(String.self, forKey: .title) ?? "Untitled"
+        backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath) ?? ""
+        genreIDS = try container.decodeIfPresent([Int].self, forKey: .genreIDS) ?? []
+        originalTitle = try container.decodeIfPresent(String.self, forKey: .originalTitle) ?? ""
+        overview = try container.decodeIfPresent(String.self, forKey: .overview) ?? ""
+        posterPath = try container.decodeIfPresent(String.self, forKey: .posterPath) ?? ""
+        releaseDate = try container.decodeIfPresent(String.self, forKey: .releaseDate) ?? ""
+        voteAverage = try container.decodeIfPresent(Double.self, forKey: .voteAverage) ?? 0
+        voteCount = try container.decodeIfPresent(Int.self, forKey: .voteCount) ?? 0
     }
 }
