@@ -56,30 +56,36 @@ enum MoviePath: String {
    case showDetails        = "tv"
    case topRatedTVShows    = "tv/top_rated"
    case popularTVShows     = "tv/popular"
+    
+    //genres
+    case genres            = "genre/movie/list"
    
    //Actors
    case personDetails      = "person"
    
    //Search
-   case search             = "search/multi"
+   case search             = "search/movie"
 
 }
 
 
 enum MovieEndpoint {
 
-   case movieDetails(id: Int)
-   case popularMovies
-   case topRatedMovies
-   case upcomingMovies
-   
-   case showDetails(id: Int)
-   case topRatedTVShows
-   case popularTVShows
-   
-   case personDetails(id: Int)
+    case movieDetails(id: Int)
+    case movieCast(id: Int)
+    case popularMovies(page: Int)
+    case topRatedMovies(page: Int)
+    case upcomingMovies(page: Int)
 
-   case search(query: String)
+    case showDetails(id: Int)
+    case topRatedTVShows(page: Int)
+    case popularTVShows(page: Int)
+
+    case genres
+
+    case personDetails(id: Int)
+
+    case search(_ query: String)
 
 
    private var environment: APIEnvironment { .production }
@@ -88,6 +94,8 @@ enum MovieEndpoint {
        switch self {
        case .movieDetails(let id):
            return "\(MoviePath.movieDetails.rawValue)/\(id)"
+       case .movieCast(let id):
+           return "\(MoviePath.movieDetails.rawValue)/\(id)/credits"
        case .popularMovies:
            return MoviePath.popularMovies.rawValue
        case .topRatedMovies:
@@ -100,6 +108,8 @@ enum MovieEndpoint {
            return MoviePath.topRatedTVShows.rawValue
        case .popularTVShows:
            return MoviePath.popularTVShows.rawValue
+       case .genres:
+           return MoviePath.genres.rawValue
        case .personDetails(let id):
            return "\(MoviePath.personDetails.rawValue)/\(id)"
        case .search:
@@ -107,15 +117,29 @@ enum MovieEndpoint {
       
        }
    }
+    
+    private var page: Int {
+        switch self {
+        case .popularMovies(let page),
+             .topRatedMovies(let page),
+             .upcomingMovies(let page),
+             .topRatedTVShows(let page),
+             .popularTVShows(let page):
+            return page
+        default:
+            return 1
+        }
+    }
 
     private var queryItems: [URLQueryItem] {
         
-        let language = UserDefaults.standard.string(forKey: "selectedLanguage") ?? "ar"
+        let language = UserDefaults.standard.string(forKey: "selectedLanguage") ?? "en"
 
         
         var items = [
             URLQueryItem(name: "api_key", value: "0d699223dc630e1d65cc7c6941884b31"),
-            URLQueryItem(name: "language", value: language)
+            URLQueryItem(name: "language", value: language),
+            URLQueryItem(name: "page", value: String(page))
         ]
 
         switch self {

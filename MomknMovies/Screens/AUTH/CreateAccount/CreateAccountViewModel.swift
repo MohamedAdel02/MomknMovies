@@ -5,7 +5,7 @@
 //  Created by Mohamed Adel on 17/08/2026.
 //
 
-import Foundation
+import SwiftUI
 
 @Observable
 class CreateAccountViewModel {
@@ -24,6 +24,9 @@ class CreateAccountViewModel {
     }
     
     private let authRepository: AuthRepository
+    
+    @ObservationIgnored @AppStorage("selectedLanguage")
+    private var selectedLanguage = "en"
 
     init(authRepository: AuthRepository = AuthRepository()) {
         self.authRepository = authRepository
@@ -47,23 +50,27 @@ class CreateAccountViewModel {
         
         if !name.isValidName() {
             invalidFields.insert(.name)
-            messages.append(String(localized: "Please enter a valid name."))
+            messages.append(String.localized("Please enter a valid name.", language: selectedLanguage)
+            )
         }
         
         if !email.isValidEmail() {
             invalidFields.insert(.email)
-            messages.append(String(localized: "Please enter a valid email."))
+            messages.append(String.localized("Please enter a valid email.", language: selectedLanguage)
+            )
         }
         
         if !password.isValidPassword() {
             invalidFields.insert(.password)
-            messages.append(String(localized: "Please enter a valid password."))
+            messages.append(String.localized("Please enter a valid password.", language: selectedLanguage)
+            )
         }
         
         if password != confirmPassword {
             invalidFields.insert(.password)
             invalidFields.insert(.confirmPassword)
-            messages.append(String(localized: "Passwords do not match."))
+            messages.append(String.localized("Passwords do not match.", language: selectedLanguage)
+            )
         }
         
         if !invalidFields.isEmpty {

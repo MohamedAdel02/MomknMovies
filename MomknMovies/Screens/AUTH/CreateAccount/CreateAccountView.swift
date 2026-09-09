@@ -14,8 +14,10 @@ enum CreateAccountViewField {
 struct CreateAccountView: View {
     
     @State var viewModel = CreateAccountViewModel()
+    @State private var isSaving = false
     @Binding var authMode: AuthMode
     
+    @Environment(\.showToast) private var showToast
     @FocusState private var focusedField: CreateAccountViewField?
     
     var body: some View {
@@ -94,24 +96,32 @@ struct CreateAccountView: View {
         .ignoresSafeArea(edges: .top)
         .contentShape(Rectangle())
         .hideKeyboardOnTap()
-        .alert("Error", isPresented: $viewModel.showAlert) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text(viewModel.alertMessage)
+        .onChange(of: viewModel.showAlert) { _, isShowing in
+            if isShowing {
+                showToast(.error(LocalizedStringKey(viewModel.alertMessage)))
+                viewModel.showAlert = false
+            }
         }
         
     }
     
     func createAccountButton() -> some View {
-        
-        Button(action: {
-            createAccountTapped()
-        }) {
-            Text("Create Account")
-                .font(.headline)
+                    
+            Button(action: {
+                createAccountTapped()
+            }) {
+                Group {
+                    if isSaving {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Text("Create Account")
+                            .font(.headline)
+                    }
+                }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 50)
+                .frame(height: 55)
                 .background(
                     RadialGradient(
                         colors: [Color.buttonGradient1, Color.buttonGradient2],
@@ -121,9 +131,10 @@ struct CreateAccountView: View {
                     )
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 15))
-        }
-        .disabled(viewModel.createAccountDisabled)
-        .opacity(viewModel.createAccountDisabled ? 0.5 : 1)
+            }
+            .disabled(viewModel.createAccountDisabled)
+            .opacity(viewModel.createAccountDisabled ? 0.5 : 1)
+                
     }
     
     func loginButton() -> some View {
@@ -143,7 +154,9 @@ struct CreateAccountView: View {
     
     func createAccountTapped() {
         Task {
+            isSaving = true
             await viewModel.createAccount()
+            isSaving = false
         }
     }
     

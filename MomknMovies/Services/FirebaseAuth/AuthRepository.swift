@@ -26,4 +26,22 @@ class AuthRepository {
     func logout() throws {
         try authManager.logout()
     }
+    
+    func updateName(_ name: String) async throws {
+        try await authManager.updateName(name)
+    }
+    
+    func changePassword(currentPassword: String, newPassword: String) async throws {
+        try await authManager.changePassword(currentPassword: currentPassword, newPassword: newPassword)
+    }
+    
+    func reauthenticate(password: String) async throws {
+        try await authManager.reauthenticate(password: password)
+    }
+    
+    func deleteAccount() async throws {
+        try await authManager.deleteAccount()
+    }
+    
+
 }
