@@ -34,9 +34,10 @@ class CreateAccountViewModel {
     
     func createAccount() async {
         guard checkCredentials() else { return }
-        
+
         do {
             try await authRepository.createAccount(name: name, email: email, password: password)
+            CredentialStore.save(email: email, password: password)
         } catch {
             alertMessage = error.localizedDescription
             showAlert = true

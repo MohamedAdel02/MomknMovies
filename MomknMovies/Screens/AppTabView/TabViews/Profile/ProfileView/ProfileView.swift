@@ -268,11 +268,8 @@ struct ProfileView: View {
     }
     
     private func signOutTapped() {
-        do {
-            try AuthRepository().logout()
-        } catch {
-            // surface via your existing alert pattern if needed
-        }
+        CredentialStore.clear()
+        try? AuthRepository().logout()
     }
     
     private func deleteAccountTapped() {
@@ -281,6 +278,7 @@ struct ProfileView: View {
         Task {
             do {
                 try await AuthRepository().deleteAccount()
+                CredentialStore.clear()
                 
 //                if let userID, let favorites = favoriteMovies.first(where: { $0.userID == userID }) {
 //                    modelContext.delete(favorites)

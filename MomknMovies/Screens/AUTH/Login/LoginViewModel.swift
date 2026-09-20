@@ -31,9 +31,9 @@ class LoginViewModel {
     
     func login() async {
         guard checkCredentials() else { return }
-        
         do {
             try await authRepository.login(email: email, password: password)
+            CredentialStore.save(email: email, password: password)
         } catch {
             alertMessage = error.localizedDescription
             showAlert = true
