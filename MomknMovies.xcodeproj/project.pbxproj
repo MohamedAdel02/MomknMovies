@@ -10,6 +10,7 @@
 		D9A462A4303275F300FAEAF6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D9A462A3303275F300FAEAF6 /* Kingfisher */; };
 		D9A462AA3032782700FAEAF6 /* SkeletonUI in Frameworks */ = {isa = PBXBuildFile; productRef = D9A462A93032782700FAEAF6 /* SkeletonUI */; };
 		D9A4635B303279F000FAEAF6 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = D9A4635A303279F000FAEAF6 /* FirebaseCore */; };
+		D9C3C6B73056CDF4002A696B /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = D9C3C6B63056CDF4002A696B /* KeychainAccess */; };
 		D9F0E1FE30348E070019A263 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D9F0E1FD30348E070019A263 /* FirebaseAuth */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,7 @@
 				D9A4635B303279F000FAEAF6 /* FirebaseCore in Frameworks */,
 				D9A462AA3032782700FAEAF6 /* SkeletonUI in Frameworks */,
 				D9F0E1FE30348E070019A263 /* FirebaseAuth in Frameworks */,
+				D9C3C6B73056CDF4002A696B /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +103,7 @@
 				D9A462A93032782700FAEAF6 /* SkeletonUI */,
 				D9A4635A303279F000FAEAF6 /* FirebaseCore */,
 				D9F0E1FD30348E070019A263 /* FirebaseAuth */,
+				D9C3C6B63056CDF4002A696B /* KeychainAccess */,
 			);
 			productName = MomknMovies;
 			productReference = D9A462873032742500FAEAF6 /* MomknMovies.app */;
@@ -135,6 +138,7 @@
 				D9A462A2303275F300FAEAF6 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				D9A462A83032782700FAEAF6 /* XCRemoteSwiftPackageReference "SkeletonUI" */,
 				D9A46359303279D800FAEAF6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				D9C3C6B53056CDF4002A696B /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D9A462883032742500FAEAF6 /* Products */;
@@ -301,6 +305,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MomknMovies/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Log in to your account using Face ID";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -334,6 +339,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MomknMovies/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Log in to your account using Face ID";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -404,6 +410,14 @@
 				minimumVersion = 12.17.0;
 			};
 		};
+		D9C3C6B53056CDF4002A696B /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -421,6 +435,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D9A46359303279D800FAEAF6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
+		};
+		D9C3C6B63056CDF4002A696B /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D9C3C6B53056CDF4002A696B /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
 		};
 		D9F0E1FD30348E070019A263 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;

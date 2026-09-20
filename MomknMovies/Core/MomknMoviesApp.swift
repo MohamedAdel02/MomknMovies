@@ -19,15 +19,17 @@ struct MomknMoviesApp: App {
     @State private var router = Router<AuthRoute>()
     @State private var session: SessionStore
     @State private var selectedTab = 0
-    
+    @State private var isLocked: Bool
+
     init() {
         FirebaseApp.configure()
-        
+
         if !UserDefaults.standard.bool(forKey: "hasLaunchedBefore") {
-            try? Auth.auth().signOut()
+            try? Auth.auth().signOut()   // Firebase session survives reinstall
             UserDefaults.standard.set(true, forKey: "hasLaunchedBefore")
         }
-        
+
+        _isLocked = State(initialValue: Auth.auth().currentUser != nil)
         _session = State(initialValue: SessionStore())
     }
     
@@ -36,6 +38,10 @@ struct MomknMoviesApp: App {
             Group {
                 if selectedLanguage == nil {
                     LanguageSelectionView()
+                } else if isLocked {
+                    MainAuthView()                 // login screen behind the Face ID prompt
+                        .environment(router)
+                        .id(selectedLanguage)
                 } else if let isSignedIn = session.isSignedIn {
                     if isSignedIn {
                         AppTabView(selectedTab: $selectedTab, userID: session.userID ?? "")
@@ -51,6 +57,9 @@ struct MomknMoviesApp: App {
                 }
             }
             .withToast()
+            .task {
+                if isLocked { await unlock() }
+            }
             .environment(\.locale, Locale(identifier: selectedLanguage ?? "en"))
             .environment(\.layoutDirection, selectedLanguage == "ar" ? .rightToLeft : .leftToRight)
             .onChange(of: session.isSignedIn) { _, newValue in
@@ -58,6 +67,12 @@ struct MomknMoviesApp: App {
                     selectedTab = 0
                 }
             }
+        }
+    }
+    
+    private func unlock() async {
+        if await BiometricAuthManager().authenticate() {
+            isLocked = false
         }
     }
 }

@@ -29,9 +29,4 @@ class SessionStore {
         }
     }
     
-//    deinit {
-//        if let handle {
-//            Auth.auth().removeStateDidChangeListener(handle)
-//        }
-//    }
 }
